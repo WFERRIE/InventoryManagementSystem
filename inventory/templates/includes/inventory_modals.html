@@ -41,15 +41,16 @@
             </div>
         <div class="modal-body">
             <form method="POST">
-                {{ purchase_form.hidden_tag() }}
+                {{ deleting_form.hidden_tag() }}
             
                 <h4 class = "text-center">
-                    Are you sure you want to buy {{ item.name }} for ${{ item.price }}?
+                    Are you sure you want to delete {{ item.name }}?
                 </h4>
 
-                <input id="purchased_item" name="purchased_item" type="hidden" value="{{item.name}}">
+                <input id="deleting_item_id" name="deleting_item_id" type="hidden" value="{{ item.id }}">
+                <input id="deleting_item_name" name="deleting_item_name" type="hidden" value="{{ item.name }}">
 
-                {{ purchase_form.submit(class="btn btn-outline-success btn-block") }}
+                {{ deleting_form.submit(class="btn btn-outline-danger btn-block") }}
             </form>
         </div>
             <div class="modal-footer">

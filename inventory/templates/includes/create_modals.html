@@ -22,10 +22,38 @@
                   <h4 class = "text-center">
                       Create a new Inventory Item
                   </h4>
-  
-                  <input id="created_item" name="created_item" type="hidden" value="Value">
-  
-                  {{ creating_form.submit(class="btn btn-outline-success btn-block") }}
+
+                  <div class = "container">
+                    <form method = "POST" class = 'form-createItem' style = 'color:whitesmoke'>
+                        {{ creating_form.hidden_tag() }}
+                        <br>
+                        <h1 class = "h3 mb-3 font-weight-normal">
+                            Create Item
+                        </h1>
+                        {{ creating_form.name.label() }}
+                        {{ creating_form.name(class = "form-control", placeholder = "Name") }}
+            
+                        {{ creating_form.price.label() }}
+                        {{ creating_form.price(class = "form-control", placeholder = "Price") }}
+
+                        {{ creating_form.quantity.label() }}
+                        {{ creating_form.quantity(class = "form-control", placeholder = "Quantity") }}
+            
+                        {{ creating_form.barcode.label() }}
+                        {{ creating_form.barcode(class = "form-control", placeholder = "Barcode") }}
+            
+                        {{ creating_form.description.label() }}
+                        {{ creating_form.description(class = "form-control", placeholder = "Description") }}
+            
+                        <br>
+                        {{ creating_form.submit(class = "btn btn-lg btn-block btn-primary") }}
+            
+                    </form>
+                </div>
+                  
+                  <!-- <input id="created_item" name="created_item" type="hidden" value="Value">
+                  
+                  {{ creating_form.submit(class="btn btn-outline-success btn-block") }} -->
               </form>
           </div>
               <div class="modal-footer">

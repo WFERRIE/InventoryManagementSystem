@@ -29,13 +29,13 @@ from inventory.models import Item
 class AddItemForm(FlaskForm):
     submit = SubmitField(label="Create Item")    
 
-class PurchaseItemForm(FlaskForm):
-    submit = SubmitField(label="Purchase Item")
+class DeleteItemForm(FlaskForm):
+    submit = SubmitField(label="Delete Item")
 
 class CreateItemForm(FlaskForm):
     name = StringField(label = 'Name', validators = [Length(min=2, max=30), DataRequired()])
-    price = DecimalField(places = 2, validators = [DataRequired()])
-    quantity = DecimalField(validators = [DataRequired()])
-    barcode = IntegerField(validators = [DataRequired()])
-    description = StringField(label = 'Name', validators = [Length(min=2, max=1024), DataRequired()])
+    price = StringField(label = 'Price', validators = [DataRequired()])
+    quantity = StringField(label = 'Quantity', validators = [DataRequired()])
+    barcode = StringField(label = 'Barcode', validators = [DataRequired()])
+    description = StringField(label = 'Description', validators = [Length(min=2, max=1024), DataRequired()])
     submit = SubmitField(label="Create Item")
