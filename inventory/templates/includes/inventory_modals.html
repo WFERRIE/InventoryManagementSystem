@@ -4,8 +4,8 @@
   }
 </style>
 
-<!-- More Info Modal -->
-<div class="modal fade" id="Modal-MoreInfo-{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Edit Modal -->
+<div class="modal fade" id="Modal-Edit-{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -17,7 +17,30 @@
                 </button>
             </div>
         <div class="modal-body">
-            {{ item.description }}
+            <form method="POST">
+                {{ deleting_form.hidden_tag() }}
+            
+                {{ editing_form.name.label() }}
+                {{ editing_form.name(class = "form-control", value = item.name, placeholder = "Name") }}
+
+                {{ editing_form.price.label() }}
+                {{ editing_form.price(class = "form-control", value = item.price, placeholder = "Price") }}
+
+                {{ editing_form.quantity.label() }}
+                {{ editing_form.quantity(class = "form-control", value = item.quantity, placeholder = "Quantity") }}
+
+                {{ editing_form.barcode.label() }}
+                {{ editing_form.barcode(class = "form-control", value = item.barcode, placeholder = "Barcode") }}
+
+                {{ editing_form.description.label() }}
+                {{ editing_form.description(class = "form-control", value = item.description, placeholder = "Description") }}
+
+                <br>
+
+                {{ editing_form.submitEditing(class = "btn btn-lg btn-block btn-primary") }}
+
+                <input id="editing_item_id" name="editing_item_id" type="hidden" value="{{ item.id }}">
+            </form>
         </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -27,7 +50,7 @@
 </div>
 
 
-<!-- Purchase Modal -->
+<!-- Delete Modal -->
 <div class="modal fade" id="Modal-Delete-{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -50,11 +73,13 @@
                 <input id="deleting_item_id" name="deleting_item_id" type="hidden" value="{{ item.id }}">
                 <input id="deleting_item_name" name="deleting_item_name" type="hidden" value="{{ item.name }}">
 
-                {{ deleting_form.submit(class="btn btn-outline-danger btn-block") }}
+                {{ deleting_form.submitDeleting(class = "btn btn-lg btn-block btn-outline-danger") }}
+
             </form>
         </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Cancel</button>
+                
             </div>
         </div>
     </div>

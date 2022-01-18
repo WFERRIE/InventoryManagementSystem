@@ -7,4 +7,3 @@ class Item(db.Model):
     quantity = db.Column(db.Integer(), nullable = False)
     barcode = db.Column(db.String(length = 12), nullable = False, unique = True)
     description = db.Column(db.String(length = 1024), nullable = False)
-
