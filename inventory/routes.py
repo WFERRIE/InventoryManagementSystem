@@ -79,3 +79,13 @@ def export_page():
 
     outfile.close()
     return send_file('../export.csv', attachment_filename='export.csv')
+
+
+
+@app.route('/error')
+def error_page():
+    return render_template('error.html')
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return redirect(url_for('error_page'))

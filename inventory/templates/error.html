@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}
+    Error
+{% endblock %}
+
+
+{% block content %}
+    <br>
+    <h2 class="text-center">Uh Oh...</h2>
+    <h6 class="text-center">Something went wrong. Try returning to <a href = "{{ url_for('home_page') }}" class = link-secondary>Home</a>.</h6>
+{% endblock %}
