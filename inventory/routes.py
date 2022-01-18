@@ -61,7 +61,7 @@ def inventory_page():
                 return redirect(url_for('inventory_page'))
 
         elif editing_form.submitEditing.data and editing_form.validate():            
-            if editing_form.validate_on_submit():
+            if editing_form.validate_on_submit():                
                 editing_item_id = request.form.get('editing_item_id')
                 non_unique_barcode = Item.query.filter_by(barcode = editing_form.barcode.data).first()
 
@@ -85,9 +85,14 @@ def inventory_page():
                     except:
                         flash(f"Something went wrong trying to edit the item. Please refresh and try again.", category = 'danger')
             
-                if editing_form.errors != {}:
-                    for err_msg in editing_form.errors.values():
-                        flash(f'There was an error editing an item: {err_msg}', category='danger')
+        
+        if creating_form.errors != {}:
+            for err_msg in creating_form.errors.values():
+                flash(f'There was an error creating an item: {err_msg}', category='danger')
+
+        if editing_form.errors != {}:
+            for err_msg in editing_form.errors.values():
+                flash(f'There was an error editing an item: {err_msg}', category='danger')
 
         return redirect(url_for('inventory_page'))
 
