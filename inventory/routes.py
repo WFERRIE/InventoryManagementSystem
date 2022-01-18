@@ -3,6 +3,7 @@ from flask import render_template, redirect, url_for, flash, request, send_file
 from inventory.models import Item
 from inventory.forms import DeleteItemForm, CreateItemForm, EditItemForm
 from inventory import db
+from sqlalchemy import func
 import sqlite3
 import csv
 
@@ -20,18 +21,30 @@ def inventory_page():
     items_displayed_per_page = 10
 
     if request.method == "POST":
-        if creating_form.submitCreating.data and creating_form.validate():
-            if creating_form.validate_on_submit():
-                item_to_create = Item(name = creating_form.name.data, price = creating_form.price.data, quantity = creating_form.quantity.data, barcode = creating_form.barcode.data, description = creating_form.description.data)
-                db.session.add(item_to_create)
-                db.session.commit()
-                flash(f'Item created successfully! {item_to_create.name} has been added to the Inventory.', category='success')
+        if creating_form.submitCreating.data and creating_form.validate(): #check that we're submitting the create item form
+            if creating_form.validate_on_submit(): #check that the form submission is valid
+                non_unique_barcode = Item.query.filter_by(barcode = creating_form.barcode.data).first()
 
-                return redirect(url_for('inventory_page'))
+                if non_unique_barcode: #check uniqueness of barcode
+                    flash(f"Error: The barcode '{creating_form.barcode.data} already exists in this database as '{non_unique_barcode.name}' with database ID: '{non_unique_barcode.id}'. Please enter a unique barcode when creating a new item.", category = "danger")
+                    return redirect(url_for('inventory_page'))
+
+                else:
+                    item_to_create = Item(name = creating_form.name.data, price = creating_form.price.data, quantity = creating_form.quantity.data, barcode = creating_form.barcode.data, description = creating_form.description.data)
+                    db.session.add(item_to_create)
+                    try:
+                        db.session.commit()
+                    except:
+                        flash(f"Something went wrong trying to create the item. Please refresh and try again.", category = 'danger')
+
+                    flash(f'Item created successfully! {item_to_create.name} has been added to the Inventory.', category='success')
+
+                    return redirect(url_for('inventory_page'))
 
             elif creating_form.errors != {}:
                 for err_msg in creating_form.errors.values():
                     flash(f'There was an error creating an item: {err_msg}', category='danger')
+
             return redirect(url_for('inventory_page'))
         
 
@@ -40,26 +53,37 @@ def inventory_page():
                 deleting_item_id = request.form.get('deleting_item_id')
                 deleting_item_name = request.form.get('deleting_item_name')
                 Item.query.filter_by(id=deleting_item_id).delete()
-                db.session.commit()
+                try:
+                    db.session.commit()
+                except:
+                    flash(f"Something went wrong trying to delete the item. Please refresh and try again.", category = 'danger')
+
                 flash(f"Successfully deleted {deleting_item_name} from the Inventory.", category='success')
                 return redirect(url_for('inventory_page'))
 
         elif editing_form.submitEditing.data and editing_form.validate():            
             if editing_form.validate_on_submit():
-                editing_item_id = request.form.get('editing_item_id')
-                item_to_edit = Item.query.filter_by(id = editing_item_id).first()
-                
-                item_to_edit.name = editing_form.name.data
-                item_to_edit.price = editing_form.price.data
-                item_to_edit.quantity = editing_form.quantity.data
-                item_to_edit.barcode = editing_form.barcode.data
-                item_to_edit.description = editing_form.description.data
+                non_unique_barcode = Item.query.filter_by(barcode = creating_form.barcode.data).first()
 
-                try:
-                    db.session.commit()
+                if non_unique_barcode: #check uniqueness of barcode
+                    flash(f"Error: The barcode '{creating_form.barcode.data} already exists in this database as '{non_unique_barcode.name}' with database ID: '{non_unique_barcode.id}'. Please enter a unique barcode when creating a new item.", category = "danger")
                     return redirect(url_for('inventory_page'))
-                except:
-                    flash(f"something went wrong trying to edit the item name", category = 'danger')
+                
+                else:
+                    editing_item_id = request.form.get('editing_item_id')
+                    item_to_edit = Item.query.filter_by(id = editing_item_id).first()
+                    
+                    item_to_edit.name = editing_form.name.data
+                    item_to_edit.price = editing_form.price.data
+                    item_to_edit.quantity = editing_form.quantity.data
+                    item_to_edit.barcode = editing_form.barcode.data
+                    item_to_edit.description = editing_form.description.data
+
+                    try:
+                        db.session.commit()
+                        return redirect(url_for('inventory_page'))
+                    except:
+                        flash(f"Something went wrong trying to edit the item. Please refresh and try again.", category = 'danger')
 
         return redirect(url_for('inventory_page'))
 

@@ -2,8 +2,8 @@ from inventory import db
 
 class Item(db.Model):
     id = db.Column(db.Integer(), primary_key = True)
-    name = db.Column(db.String(length = 30), nullable = False, unique = True)
+    name = db.Column(db.String(length = 30), nullable = False)
     price = db.Column(db.Float(), nullable = False)
-    quantity = db.Column(db.Integer(), nullable = False)
+    quantity = db.Column(db.Float(), nullable = False)
     barcode = db.Column(db.String(length = 12), nullable = False, unique = True)
     description = db.Column(db.String(length = 1024), nullable = False)
