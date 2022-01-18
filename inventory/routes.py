@@ -11,11 +11,14 @@ import csv
 def home_page():
     return render_template('home.html')
 
+
 @app.route('/inventory', methods=['GET', 'POST'])
 def inventory_page():
     deleting_form = DeleteItemForm()
     creating_form = CreateItemForm()
     editing_form = EditItemForm()
+    items_displayed_per_page = 10
+
     if request.method == "POST":
         if creating_form.submitCreating.data and creating_form.validate():
             if creating_form.validate_on_submit():
@@ -57,14 +60,14 @@ def inventory_page():
                     return redirect(url_for('inventory_page'))
                 except:
                     flash(f"something went wrong trying to edit the item name", category = 'danger')
-                
-                
 
         return redirect(url_for('inventory_page'))
 
     if request.method == "GET":
-        items = Item.query.all()
+        page = request.args.get('page', 1, type = int)
+        items = Item.query.paginate(page = page, per_page = items_displayed_per_page)
         return render_template('inventory.html', items=items, deleting_form = deleting_form, creating_form = creating_form, editing_form = editing_form)
+
 
 @app.route('/export')
 def export_page():
@@ -78,7 +81,7 @@ def export_page():
     outcsv.writerows(cursor.fetchall())
 
     outfile.close()
-    return send_file('../export.csv', attachment_filename='export.csv')
+    return send_file('../export.csv', as_attachment = True, attachment_filename = 'export.csv', mimetype = "text/csv")
 
 
 
