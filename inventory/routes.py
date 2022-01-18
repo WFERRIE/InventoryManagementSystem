@@ -84,6 +84,10 @@ def inventory_page():
                         return redirect(url_for('inventory_page'))
                     except:
                         flash(f"Something went wrong trying to edit the item. Please refresh and try again.", category = 'danger')
+            
+                if editing_form.errors != {}:
+                    for err_msg in editing_form.errors.values():
+                        flash(f'There was an error editing an item: {err_msg}', category='danger')
 
         return redirect(url_for('inventory_page'))
 
@@ -93,7 +97,7 @@ def inventory_page():
         return render_template('inventory.html', items=items, deleting_form = deleting_form, creating_form = creating_form, editing_form = editing_form)
 
 
-@app.route('/export')
+@app.route('/export', methods=['GET', 'POST'])
 def export_page():
     con = sqlite3.connect('inventory/inventory.db')
     outfile = open('export.csv', 'w', newline = '')
@@ -106,7 +110,7 @@ def export_page():
 
     outfile.close()
     con.close()
-    return send_file('../export.csv', as_attachment = True, attachment_filename = 'export.csv', mimetype = "text/csv")
+    return send_file('../export.csv', as_attachment = True, attachment_filename = 'export.csv', mimetype = "text/csv", cache_timeout=0)
 
 
 
