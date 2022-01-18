@@ -3,9 +3,6 @@ from flask import send_file
 import sqlite3
 import csv
 
-
-
-
 def exportFile():
     con = sqlite3.connect('inventory/inventory.db')
     outfile = open('export.csv', 'w', newline = '')

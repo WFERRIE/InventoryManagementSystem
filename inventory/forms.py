@@ -1,9 +1,6 @@
 from flask_wtf import FlaskForm
-from werkzeug.routing import ValidationError
 from wtforms import StringField, SubmitField, DecimalField
-from wtforms.validators import Length, DataRequired, ValidationError, NumberRange, Regexp
-from inventory.models import Item
-import re
+from wtforms.validators import Length, DataRequired, Regexp
 
 class CreateItemForm(FlaskForm):
     name = StringField(label = 'Name', validators = [Length(min=2, max=30), DataRequired()])

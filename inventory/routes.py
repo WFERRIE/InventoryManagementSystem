@@ -110,7 +110,7 @@ def export_page():
 
     cursor = con.execute('select * from item')
 
-    # outcsv.writerow(x[0] for x in cursor.description)
+    outcsv.writerow(x[0] for x in cursor.description)
     outcsv.writerows(cursor.fetchall())
 
     outfile.close()

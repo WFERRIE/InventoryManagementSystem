@@ -1,3 +1,4 @@
+id,name,price,quantity,barcode,description
 1,Broccoli,0.79,15.0,111001101110,One head of broccoli
 5,Carrots,0.29,11.0,400000000000,One full-size carrot
 6,Stew,6.99,26.0,687453189687,Pre-made packets of Beef and Vegetable Stew
@@ -14,3 +15,4 @@
 17,Iodized Table Salt (bulk),4.99,63.4,294729119231,Qty in lbs. Price per lb
 18,Noodles,0.49,120.0,174393723409,A package of noodles
 19,McDonald's Ground Coffee,17.99,15.0,372958367288,"McDonald's Ground Coffee, Dark Roast"
+20,Oranges,0.23,850.0,000000000011,Product of Florida. Sold on a per lb basis.
