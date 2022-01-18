@@ -3,7 +3,6 @@ from flask import render_template, redirect, url_for, flash, request, send_file
 from inventory.models import Item
 from inventory.forms import DeleteItemForm, CreateItemForm, EditItemForm
 from inventory import db
-from sqlalchemy import func
 import sqlite3
 import csv
 
@@ -63,10 +62,11 @@ def inventory_page():
 
         elif editing_form.submitEditing.data and editing_form.validate():            
             if editing_form.validate_on_submit():
-                non_unique_barcode = Item.query.filter_by(barcode = creating_form.barcode.data).first()
+                editing_item_id = request.form.get('editing_item_id')
+                non_unique_barcode = Item.query.filter_by(barcode = editing_form.barcode.data).first()
 
-                if non_unique_barcode: #check uniqueness of barcode
-                    flash(f"Error: The barcode '{creating_form.barcode.data} already exists in this database as '{non_unique_barcode.name}' with database ID: '{non_unique_barcode.id}'. Please enter a unique barcode when creating a new item.", category = "danger")
+                if non_unique_barcode and (int(non_unique_barcode.id) != int(editing_item_id)): #check uniqueness of barcode
+                    flash(f"Error: The barcode '{editing_form.barcode.data} already exists in this database as '{non_unique_barcode.name}' with database ID: '{non_unique_barcode.id}'. Please enter a unique barcode when creating a new item.", category = "danger")
                     return redirect(url_for('inventory_page'))
                 
                 else:
@@ -101,10 +101,11 @@ def export_page():
 
     cursor = con.execute('select * from item')
 
-    outcsv.writerow(x[0] for x in cursor.description)
+    # outcsv.writerow(x[0] for x in cursor.description)
     outcsv.writerows(cursor.fetchall())
 
     outfile.close()
+    con.close()
     return send_file('../export.csv', as_attachment = True, attachment_filename = 'export.csv', mimetype = "text/csv")
 
 
