@@ -1,8 +1,10 @@
 from inventory import app
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, send_file
 from inventory.models import Item
 from inventory.forms import DeleteItemForm, CreateItemForm, EditItemForm
 from inventory import db
+import sqlite3
+import csv
 
 @app.route('/')
 @app.route('/home')
@@ -17,14 +19,10 @@ def inventory_page():
     if request.method == "POST":
         if creating_form.submitCreating.data and creating_form.validate():
             if creating_form.validate_on_submit():
-                # try:
-                print(f'Name: {creating_form.name.data}, price: {creating_form.price.data}, quantity: {creating_form.quantity.data} ,barcode: {creating_form.barcode.data} , description: {creating_form.description.data},')
                 item_to_create = Item(name = creating_form.name.data, price = creating_form.price.data, quantity = creating_form.quantity.data, barcode = creating_form.barcode.data, description = creating_form.description.data)
                 db.session.add(item_to_create)
                 db.session.commit()
                 flash(f'Item created successfully! {item_to_create.name} has been added to the Inventory.', category='success')
-                # except:
-                #     flash("Something went wrong creating your item. Please double check your Name and Barcode are Unique", category = "danger")
 
                 return redirect(url_for('inventory_page'))
 
@@ -67,3 +65,17 @@ def inventory_page():
     if request.method == "GET":
         items = Item.query.all()
         return render_template('inventory.html', items=items, deleting_form = deleting_form, creating_form = creating_form, editing_form = editing_form)
+
+@app.route('/export')
+def export_page():
+    con = sqlite3.connect('inventory/inventory.db')
+    outfile = open('export.csv', 'w', newline = '')
+    outcsv = csv.writer(outfile)
+
+    cursor = con.execute('select * from item')
+
+    outcsv.writerow(x[0] for x in cursor.description)
+    outcsv.writerows(cursor.fetchall())
+
+    outfile.close()
+    return send_file('../export.csv', attachment_filename='export.csv')
