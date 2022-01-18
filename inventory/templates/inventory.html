@@ -26,8 +26,8 @@
                     {% include 'includes/inventory_modals.html' %}
                     <tr>
                         <td>{{ item.id }}</td>
-                        <td>{{ item.name }}</td>
-                        <td>$ {{ item.price }}</td>
+                        <td>{{ item.name }}</td>                        
+                        <td>$ {{'%0.2f'| format(item.price|float)}}</td>
                         <td>{{ item.quantity }}</td>
                         <td>{{ item.barcode }}</td>
                         <td>{{ item.description }}</td>
@@ -43,31 +43,11 @@
             </table>
         </div>
         <div class="col-4">
-            <h2>Create Item</h2>
+            <h2>Additional Options</h2>
             <br>
             {% include 'includes/create_modals.html' %}
             <button class="btn btn-outline btn-success" data-toggle="modal" data-target="#Modal-CreateItem">Create Item</button>
             <a href="{{ url_for('export_page') }}" class="btn btn-outline btn-info">Export Data</a>
-
-            <!-- <div class="row">
-                {% for owned_item in owned_items %}
-                {% include 'includes/owned_items_modals.html' %}
-                    <div class='col-md-6'>
-                        <div style="margin-bottom: 5px" class="card text-center bg-dark">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ owned_item.name }}</h5>
-                                <button type="button" class="btn btn-outline-danger" style="margin-bottom: 5px"
-                                        data-toggle="modal" data-target="#Modal-SellingConfirm-{{ owned_item.id }}">
-                                    Sell this Item
-                                </button>
-                                <p class="card-text"><strong>
-                                    Value: ${{ owned_item.price }}
-                                </strong></p>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %} -->
-            <!-- </div> -->
         </div>
     </div>
     
