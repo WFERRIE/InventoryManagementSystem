@@ -19,4 +19,4 @@ pip install -r </path/to>/requirements.txt
 Once the required packages have been installed, you may run this project via the command line but navigating within terminal to the directory containing ```run.py```, and executing the following command:
 ```python run.py```.
 
-The app can then be accessed via any browser by navigating to ```http://127.0.0.1:5000/``` , (unless the terminal output says it is running elsewhere).
+The app can then be accessed via any browser by navigating to ```http://127.0.0.1:5000/```
